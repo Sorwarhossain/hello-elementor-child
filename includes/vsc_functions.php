@@ -91,4 +91,3 @@ function vsc_get_formatted_dayname_by_date($date){
 }
 
 
-echo date('l', strtotime('8/7/2020'));
