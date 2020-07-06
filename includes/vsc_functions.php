@@ -86,4 +86,9 @@ function vsc_get_product_category_slug_by_id( $id ){
 
 function vsc_get_formatted_dayname_by_date($date){
    $dayname_of_week = date('l', strtotime($date));
+
+   return $dayname_of_week;
 }
+
+
+echo date('l', strtotime('8/7/2020'));

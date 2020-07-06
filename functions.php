@@ -19,6 +19,9 @@ require_once 'includes/ajax/vsc_ajax_decrease_item_to_cart.php';
 require_once 'includes/ajax/vsc_ajax_load_product_details.php';
 require_once 'includes/ajax/vsc_ajax_add_to_cart_product_details.php';
 require_once 'includes/ajax/vsc_ajax_find_shipping_city.php';
+require_once 'includes/ajax/vsc_ajax_load_city_checkout_times.php';
+
+
 
 // Require Template Tags
 require_once 'includes/vsc-template-tags.php';
@@ -56,6 +59,9 @@ function vsc_child_enqueue() {
     // load if checkout page
     if(is_checkout()){
         wp_enqueue_script('checkout-scripts', get_stylesheet_directory_uri() . '/assets/js/checkout-scripts.js', array(), false, true);
+        wp_localize_script( 'checkout-scripts', 'vsc_loadmore', array(
+            'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
+        ));
     }
     
         

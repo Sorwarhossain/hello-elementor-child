@@ -130,11 +130,10 @@ function vsc_add_custom_additional_checkout_fields($checkout){
     $after_3_days = strtotime("+ 3days");
     $after_4_days = strtotime("+ 4days");
 
-    $days_letter_2 = date('j/m/Y', $after_2_days);
-    $days_letter_3 = date('j/m/Y', $after_3_days);
-    $days_letter_4 = date('j/m/Y', $after_4_days);
+    $days_letter_2 = date('j-m-Y', $after_2_days);
+    $days_letter_3 = date('j-m-Y', $after_3_days);
+    $days_letter_4 = date('j-m-Y', $after_4_days);
 
-    $dayofweek = date('l', strtotime($days_letter_2));
 
     echo '<div id="vsc_checkout_dates">';
 
@@ -143,18 +142,20 @@ function vsc_add_custom_additional_checkout_fields($checkout){
         echo '<table id="vsc_checkout_dates_table">';
             echo '<tr>';
 
-                echo '<td><h4>'. $dayofweek .'</h4><p>'. $days_letter_2 .'</p></td>';
+                echo '<td><h4>'. vsc_get_formatted_dayname_by_date($days_letter_2) .'</h4><p>'. $days_letter_2 .'</p></td>';
                 echo '<td><button class="vsc_selectable_date">10pm - 8pm</button></td>';
             echo '</tr>';
             echo '<tr>';
-                echo '<td><h4>Crimsos</h4><p>'. $days_letter_3 .'</p></td>';
+                echo '<td><h4>'. vsc_get_formatted_dayname_by_date($days_letter_3) .'</h4><p>'. $days_letter_3 .'</p></td>';
                 echo '<td><button class="vsc_selectable_date">10pm - 8pm</button></td>';
             echo '</tr>';
             echo '<tr>';
-                echo '<td><h4>Crimsos</h4><p>'. $days_letter_4 .'</p></td>';
+                echo '<td><h4>'. vsc_get_formatted_dayname_by_date($days_letter_4) .'</h4><p>'. $days_letter_4 .'</p></td>';
                 echo '<td><button class="vsc_selectable_date">10pm - 8pm</button></td>';
             echo '</tr>';
         echo '</table>';
+
+        echo '<a href="#" id="vsc_view_more_checkout_times">View more shipping times></a>';
 
     echo '</div>';
 

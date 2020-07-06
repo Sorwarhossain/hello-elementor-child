@@ -1189,7 +1189,18 @@ p.vsc_checkout_price_table_notice {
 }
 #vsc_checkout_dates_table {
     border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+}
+#vsc_view_more_checkout_times {
+    color: #1e824c;
+    font-weight: 700;
 }
 #vsc_checkout_dates {
     margin: 16px 0 25px;
+}
+#vsc_checkout_dates_table > p {
+    text-align: center;
+    color: #000;
+    font-size: 16px;
+    margin: 40px 0;
 }

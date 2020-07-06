@@ -41,33 +41,8 @@
     // End of document ready
 
 
-    // Customize the checkout fields layout
-    var billing_first_name_field = $("#billing_first_name_field")[0].outerHTML;
-    var billing_last_name_field = $("#billing_last_name_field")[0].outerHTML;
-    var billing_email_field = $("#billing_email_field")[0].outerHTML;
-    var billing_phone_field = $("#billing_phone_field")[0].outerHTML;
-    var billing_extra_phone_field = $("#billing_extra_phone_field")[0].outerHTML;
 
-    $("#billing_first_name_field").remove();
-    $("#billing_last_name_field").remove();
-    $("#billing_email_field").remove();
-    $("#billing_phone_field").remove();
-    $("#billing_extra_phone_field").remove();
-
-    $('.vsc_checkout_billing_fields .woocommerce-billing-fields__field-wrapper').prepend('<div class="vsc_billing_input_fields">'+ billing_first_name_field + billing_last_name_field + billing_email_field + billing_phone_field + billing_extra_phone_field +'</div>');
-
-
-    billing_city_field
-    billing_address_1_field
-    billing_address_2_field
-    billing_state_field
-    billing_apartment_field
-    billing_floor_field
-    billing_entry_code_field
     
-    
-    
-
 
 
     // checkout page scripts
@@ -103,11 +78,43 @@
 
         // Proceed to next step
         $('body').attr('checkout-step', 'second');
-        $('#first_col .vsc_place_order_button .button').hide();
         $('#second_col .vsc_place_order_button .button').show();
         $('#second_col').removeClass('disabled');
 
+        
 
+        // Populate the checkout times
+        var selected_city = $('#billing_city option').filter(":selected").val();
+        $('#vsc_checkout_dates_table').empty().html('<p>Second .. We\'ll already show you the shipping times</p>');
+        var data = {
+            action: 'vsc_load_city_checkout_times',
+            selected_city: selected_city,
+        };
+
+        $.ajax({
+            type: 'post',
+            url: vsc_loadmore.ajaxurl,
+            data: data,
+            beforeSend: function (response) {
+                //$thisbutton.removeClass('added').addClass('loading');
+            },
+            complete: function (response) {
+                //$thisbutton.addClass('added').removeClass('loading');
+            },
+            success: function (response) {
+                console.log(response);
+                // if(response){
+                //     $('#city_search_no_result').css('display', 'none');
+                //     $('#city_search_result').css('display', 'block');
+                //     $('#city_search_result .elementor-widget-wrap').html(response);
+                // } else {
+                //     $('#city_search_result').css('display', 'none');
+                //     $('#city_search_no_result').css('display', 'block');
+                // }
+            },
+        });
+
+   
 
 
     });
