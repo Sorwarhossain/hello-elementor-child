@@ -97,12 +97,17 @@
             data: data,
             beforeSend: function (response) {
                 //$thisbutton.removeClass('added').addClass('loading');
+                console.log(data);
             },
             complete: function (response) {
                 //$thisbutton.addClass('added').removeClass('loading');
             },
             success: function (response) {
+
                 console.log(response);
+
+                if(response) $('#vsc_checkout_dates_table').html(response);
+                
                 // if(response){
                 //     $('#city_search_no_result').css('display', 'none');
                 //     $('#city_search_result').css('display', 'block');

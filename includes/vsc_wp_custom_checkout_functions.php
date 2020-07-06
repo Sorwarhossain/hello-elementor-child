@@ -126,32 +126,26 @@ function custom_override_checkout_fields( $fields ) {
 add_action('woocommerce_before_order_notes', 'vsc_add_custom_additional_checkout_fields');
 function vsc_add_custom_additional_checkout_fields($checkout){
 
-    $after_2_days = strtotime("+ 2days");
-    $after_3_days = strtotime("+ 3days");
-    $after_4_days = strtotime("+ 4days");
-
-    $days_letter_2 = date('j-m-Y', $after_2_days);
-    $days_letter_3 = date('j-m-Y', $after_3_days);
-    $days_letter_4 = date('j-m-Y', $after_4_days);
+    $days_letter_2 = date('j-m-Y', strtotime("+ 2days"));
+    $days_letter_3 = date('j-m-Y', strtotime("+ 3days"));
+    $days_letter_4 = date('j-m-Y', strtotime("+ 4days"));
 
 
     echo '<div id="vsc_checkout_dates">';
-
-    
 
         echo '<table id="vsc_checkout_dates_table">';
             echo '<tr>';
 
                 echo '<td><h4>'. vsc_get_formatted_dayname_by_date($days_letter_2) .'</h4><p>'. $days_letter_2 .'</p></td>';
-                echo '<td><button class="vsc_selectable_date">10pm - 8pm</button></td>';
+                echo '<td><a href="#" class="vsc_selectable_date">10pm - 8pm</a></td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td><h4>'. vsc_get_formatted_dayname_by_date($days_letter_3) .'</h4><p>'. $days_letter_3 .'</p></td>';
-                echo '<td><button class="vsc_selectable_date">10pm - 8pm</button></td>';
+                echo '<td><a href="#" class="vsc_selectable_date">10pm - 8pm</a></td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td><h4>'. vsc_get_formatted_dayname_by_date($days_letter_4) .'</h4><p>'. $days_letter_4 .'</p></td>';
-                echo '<td><button class="vsc_selectable_date">10pm - 8pm</button></td>';
+                echo '<td><a href="#" class="vsc_selectable_date">10pm - 8pm</a></td>';
             echo '</tr>';
         echo '</table>';
 

@@ -91,3 +91,9 @@ function vsc_get_formatted_dayname_by_date($date){
 }
 
 
+// $weekly_available_times = get_field( "weekly_available_times", 260 );
+// echo var_dump($weekly_available_times);
+
+
+// $checkout_date = date('5-5-2020', strtotime("+ 2days"));
+// echo $checkout_date;
