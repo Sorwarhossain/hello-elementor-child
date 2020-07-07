@@ -16,6 +16,7 @@ woocommerce_form_field(
 		'class' => array(
 			'form-row-wide'
 		),
+		'required' => true,
 		'label' => __('I have read and approved the <a href="#" target="_blank">terms of use</a>'),
 	),
 	$checkout->get_value('vsc_payment_terms_services')

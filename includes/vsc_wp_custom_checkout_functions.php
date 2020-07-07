@@ -135,7 +135,6 @@ function vsc_add_custom_additional_checkout_fields($checkout){
 
         echo '<table id="vsc_checkout_dates_table">';
             echo '<tr>';
-
                 echo '<td><h4>'. vsc_get_formatted_dayname_by_date($days_letter_2) .'</h4><p>'. $days_letter_2 .'</p></td>';
                 echo '<td><a href="#" class="vsc_selectable_date">10pm - 8pm</a></td>';
             echo '</tr>';
@@ -149,7 +148,31 @@ function vsc_add_custom_additional_checkout_fields($checkout){
             echo '</tr>';
         echo '</table>';
 
-        echo '<a href="#" id="vsc_view_more_checkout_times">View more shipping times></a>';
+        woocommerce_form_field(
+            'vsc_checkout_delivery_date', 
+            array(
+                'type' => 'text',
+                'label' => __('Product Delivery Date'),
+                'class' => array(
+                    'form-row-wide'
+                ),
+                'required' => true,
+            ),
+            $checkout->get_value('vsc_checkout_delivery_date')
+        );
+
+        woocommerce_form_field(
+            'vsc_checkout_delivery_time', 
+            array(
+                'type' => 'text',
+                'label' => __('Product Delivery Time'),
+                'class' => array(
+                    'form-row-wide'
+                ),
+                'required' => true,
+            ),
+            $checkout->get_value('vsc_checkout_delivery_time')
+        );
 
     echo '</div>';
 

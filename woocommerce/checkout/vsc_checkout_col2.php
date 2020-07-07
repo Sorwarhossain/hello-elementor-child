@@ -16,7 +16,7 @@
 
 
     <div class="vsc_place_order_button">
-        <a href="#" class="button" id="vsc_go_delivery_stage">In summary and payment</a>
+        <a href="#" class="button" id="vsc_go_payment_stage">In summary and payment</a>
     </div>
 
 </div>

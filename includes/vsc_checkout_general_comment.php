@@ -5,7 +5,7 @@ echo '<div class="vsc_shipping_general_comment_wrapper">';
 
     echo '<div class="vsc_checkout_remark">
         <h3 class="vsc_custom_checkout_title">Remarks</h3>
-        <button id="vsc_close_remark_btn">Add Comments <i class="fas fa-plus"></i></button>
+        <a href="#" id="vsc_close_remark_btn" onclick="return false;" >Add Comments <i class="fas fa-plus"></i></a>
     </div>';
 
     echo '<div class="vsc_shipping_general_comment_forms">';

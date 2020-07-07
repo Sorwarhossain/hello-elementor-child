@@ -26,7 +26,7 @@
                 $(this).removeClass('active');
                 $(this).find('#vsc_close_remark_btn i').removeClass('fa-minus');
                 $(this).find('#vsc_close_remark_btn i').addClass('fa-plus');
-                $(this).siblings('.vsc_shipping_general_comment_forms').slideUpy();
+                $(this).siblings('.vsc_shipping_general_comment_forms').slideUp();
             } else {
                 $(this).addClass('active');
                 $(this).find('#vsc_close_remark_btn i').removeClass('fa-plus');
@@ -59,22 +59,30 @@
     $('#vsc_go_delivery_stage').on('click', function(e){
         e.preventDefault();
 
+        var error = false;
         
         // Check if there is a empty field
         $('#first_col .form-row.validate-required').each(function(){
             if($(this).find('input').length > 0){
                 if(!$(this).find('input').val()){
                     alert('Please fill all the required fields');
+                    error = true;
                     return false;
                 }
             };
             if($(this).find('select').length > 0){
                 if( !$(this).find('select option').filter(":selected").val() ){
                     alert('Please fill all the required fields');
+                    error = true;
                     return false;
                 }
             };
         });
+
+        // If there is error then just return the request false
+        if(error){
+            return false;
+        }
 
         // Proceed to next step
         $('body').attr('checkout-step', 'second');
@@ -103,24 +111,60 @@
                 //$thisbutton.addClass('added').removeClass('loading');
             },
             success: function (response) {
-
-                console.log(response);
-
-                if(response) $('#vsc_checkout_dates_table').html(response);
-                
-                // if(response){
-                //     $('#city_search_no_result').css('display', 'none');
-                //     $('#city_search_result').css('display', 'block');
-                //     $('#city_search_result .elementor-widget-wrap').html(response);
-                // } else {
-                //     $('#city_search_result').css('display', 'none');
-                //     $('#city_search_no_result').css('display', 'block');
-                // }
+                if(response) $('#vsc_checkout_dates_table').html(response);    
             },
         });
 
    
 
+
+    });
+
+
+
+    // When select the checkout time
+    $('.vsc_selectable_date').live('click', function(e){
+        e.preventDefault();
+        var selected_time = $(this).text();
+        var selected_date = $(this).parent().siblings('td').find('p').text();
+
+        $('.vsc_selectable_date').removeClass('selected_date');
+        $(this).addClass('selected_date');
+
+        // Update the field value
+        $('#vsc_checkout_delivery_date').val(selected_date);
+        $('#vsc_checkout_delivery_time').val(selected_time);
+    });
+
+
+
+    // ON click at first step
+    $('#vsc_go_payment_stage').on('click', function(e){
+        e.preventDefault();
+
+        var error = false;
+
+        // Check if there is a empty field
+        $('#second_col .form-row.validate-required').each(function(){
+            if($(this).find('input').length > 0){
+                if(!$(this).find('input').val()){
+                    alert('Please select checkout date and time');
+                    error = true;
+                    return false;
+                }
+            };
+        });
+
+
+        // If there is error then just return the request false
+        if(error){
+            return false;
+        }
+
+        // Proceed to next step
+        $('body').attr('checkout-step', 'third');
+        $('#third_col .vsc_place_order_button .button').show();
+        $('#third_col').removeClass('disabled');
 
     });
 
