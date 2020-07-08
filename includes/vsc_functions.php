@@ -51,7 +51,7 @@ function vsc_remove_cart_item_by_product_id( $product_id ){
 
     foreach( WC()->cart->get_cart() as $cart_item_key => $cart_item ){
         if ( $product_id == $cart_item['product_id'] ){
-            return WC()->cart->remove_cart_item( $cart_item_key );;
+            return WC()->cart->remove_cart_item( $cart_item_key );
             // break;
         }
     }
@@ -90,10 +90,3 @@ function vsc_get_formatted_dayname_by_date($date){
    return $dayname_of_week;
 }
 
-
-// $weekly_available_times = get_field( "weekly_available_times", 260 );
-// echo var_dump($weekly_available_times);
-
-
-// $checkout_date = date('5-5-2020', strtotime("+ 2days"));
-// echo $checkout_date;

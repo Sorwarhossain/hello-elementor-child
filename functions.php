@@ -20,6 +20,8 @@ require_once 'includes/ajax/vsc_ajax_load_product_details.php';
 require_once 'includes/ajax/vsc_ajax_add_to_cart_product_details.php';
 require_once 'includes/ajax/vsc_ajax_find_shipping_city.php';
 require_once 'includes/ajax/vsc_ajax_load_city_checkout_times.php';
+require_once 'includes/ajax/vsc_generate_product_quantity_html.php';
+require_once 'includes/ajax/vsc_remove_items_from_cart.php';
 
 
 
@@ -66,7 +68,7 @@ function vsc_child_enqueue() {
     
         
 }
-add_action( 'wp_enqueue_scripts', 'vsc_child_enqueue', 99);
+add_action( 'wp_enqueue_scripts', 'vsc_child_enqueue', PHP_INT_MAX);
 
 // Support SVG file upload
 function add_file_types_to_uploads($file_types){

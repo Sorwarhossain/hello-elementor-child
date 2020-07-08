@@ -10,6 +10,10 @@
     $(document).ready(function(){
 
 
+        // Add new field to the menu cart
+        vsc_add_elements_to_cart();
+
+
         $('li.product.vsc-product-item h3.title a').live('click', function(e){
             e.preventDefault();
 
@@ -321,10 +325,14 @@
                             }
                         });
 
-                        $(document.body).trigger('added_to_cart', [{
-                            added_product_html: response.added_product_html
-                        }]);
+                        // check if it is clicking inside of cart
+                        if(clicked_button.closest('.product-add-to-cart').parent('.cart-product-add-to-cart').length > 0){
 
+                        } else {
+                            $(document.body).trigger('added_to_cart', [{
+                                added_product_html: response.added_product_html
+                            }]);
+                        }
                     }
                 },
             });
@@ -423,28 +431,6 @@
 
 
         
-
-
-
-
-        // Add new field to the menu cart
-        $('.vsc_cart_menu .elementor-menu-cart__products .elementor-menu-cart__product').each(function(){
-            var quantity_element = `
-                <div class="elementor-menu-cart__cart_quantity cart_quantity">
-                    <div class="vsc_cart_plus_minus_icon">
-                        <div class="cart_increase_product_plus_wrap"><a href="#" class="cart_increase_product_plus" data-id=""></a></div>
-                        <div class="vsc_cart_plus_minus_icon_top">
-                            <h4 class="product_number">4</h4>
-                            <p>יח׳</p>
-                        </div>
-                        <div class="cart_decrease_product_minus_wrap"><a href="#" class="cart_decrease_product_minus" data-id=""></a></div>
-                    </div>
-                </div>
-            `;
-            $(this).find('.product-name').after(quantity_element);
-        });
-
-
         
 
         $(document.body).live('added_to_cart', function(event, object){
@@ -455,11 +441,16 @@
                 setTimeout(function(){ 
                     $('.vsc_popup_cart_menu').fadeOut();
                 }, 3000);
+
             }
+
         });
 
+
+
+
+
         $(document.body).live('removed_from_cart', function(event, object){
-            console.log('trigger works');
             if (object.added_product_html !== undefined){
                 $('.vsc_popup_cart_menu .elementor-menu-cart__products').html(object.added_product_html);
                 $('.vsc_popup_cart_menu').fadeIn();
@@ -662,6 +653,86 @@
             
         });
     });
+
+
+    
+
+   function vsc_add_elements_to_cart(){
+
+        $('.vsc_cart_menu .elementor-menu-cart__products .elementor-menu-cart__product').each(function(){
+
+            var product_id = $(this).find('.product-remove a').attr('data-product_id');
+
+            var selected_product = $(this);
+
+            var data = {
+                action: 'vsc_generate_product_quantity_html',
+                product_id: product_id,
+            };
+
+            $.ajax({
+                type: 'post',
+                url: vsc_loadmore.ajaxurl,
+                data: data,
+                beforeSend: function (response) {
+                    //$thisbutton.removeClass('added').addClass('loading');
+                },
+                complete: function (response) {
+                    //$thisbutton.addClass('added').removeClass('loading');
+                },
+                success: function (response) {
+                    if(response) selected_product.find('.product-name').after(response);
+                },
+            });
+        });
+
+    }
+
+
+
+
+
+
+ 
+    $(document).ready(function(){
+
+        $('.vsc_cart_sidebar .product-remove a').live('click', function(e){
+
+            e.preventDefault();
+
+            var product_id = $(this).attr('product_id');
+    
+            var data = {
+                action: 'vsc_remove_items_from_cart',
+                product_id: product_id,
+            };
+    
+            $.ajax({
+                type: 'post',
+                url: vsc_loadmore.ajaxurl,
+                data: data,
+                beforeSend: function (response) {
+                    //$thisbutton.removeClass('added').addClass('loading');
+                },
+                complete: function (response) {
+                    //$thisbutton.addClass('added').removeClass('loading');
+                },
+                success: function (response) {
+                    if(response.success){
+                        $('.vsc_cart_sidebar button[name="update_cart"]').trigger('click');
+                    } else {
+                        console.log('Cart Item not removed for an unknown issue!');
+                    }
+                },
+            });
+
+        });
+
+        
+
+    });
+
+    
 
 
 
