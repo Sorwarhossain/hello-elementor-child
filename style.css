@@ -818,7 +818,7 @@ h3.related_title {
 li.product.vsc-product-item.vsc-only-product.has_related_product:hover {
     position: relative;
 }
-li.product.vsc-product-item.vsc-only-product.has_related_product:hover .product.vsc-product-item.vsc-only-product.vsc-related_product {
+li.product.vsc-product-item.vsc-only-product.has_related_product.vsc_already_in_cart:hover .product.vsc-product-item.vsc-only-product.vsc-related_product {
     display: flex;
     z-index: 99;
 }
@@ -1432,4 +1432,10 @@ h2.vsc_cart_title {
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
     background-color:#e9e9e9 !important; 
+}
+.vsc_category_title_wrap {
+    margin-bottom: 20px;
+}
+.vas_hidden_cat_name {
+    display: none;
 }

@@ -90,3 +90,13 @@ function vsc_get_formatted_dayname_by_date($date){
    return $dayname_of_week;
 }
 
+
+
+function vsc_get_product_unit_type_for_simple_product($product_id){
+    $product = wc_get_product($product_id);
+    if($product->is_type('simple')){
+        return $product->get_meta('vsc_product_unit_label');
+    }
+
+    return יח׳;
+}

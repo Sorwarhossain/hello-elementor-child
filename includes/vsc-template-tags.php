@@ -86,7 +86,7 @@ function vsc_get_product_loop_cart_icons($product_id){
 
 
 
-function vsc_get_product_added_cart_popup($product_id){
+function vsc_get_product_added_cart_popup($product_id, $vsc_product_unit_type){
 
     $product_thumbnail = get_the_post_thumbnail($product_id, 'thumbnail');
     $product_name = get_the_title($product_id);
@@ -104,7 +104,7 @@ function vsc_get_product_added_cart_popup($product_id){
             <div class="elementor-menu-cart__cart_quantity cart_quantity">
                 <div class="vsc_cart_plus_minus_icon_top">
                     <h4 class="product_number">{$product_added_cart_count}</h4>
-                    <p>יח׳</p>
+                    <p>{$vsc_product_unit_type}</p>
                 </div>
             </div>
             <div class="elementor-menu-cart__product-price product-price" data-title="Price">

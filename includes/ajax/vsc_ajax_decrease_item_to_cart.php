@@ -12,6 +12,8 @@ function vsc_ajax_decrease_item_to_cart_ajax_handler(){
     $old_quantity = floatval($_POST['old_quantity']);
     $error = false;
 
+    $vsc_product_unit_type = '';
+
     if($old_quantity  < 0.5){
         $data = array(
             'error' => true,
@@ -48,6 +50,7 @@ function vsc_ajax_decrease_item_to_cart_ajax_handler(){
                     if( $variation['attributes']['attribute_pa_price-type'] == 'price-per-kg' ){
                         $variation_id = $variation['variation_id'];
                         $quantity = 0.5;
+                        
                     } else {
                         $oposite_variation_id = $variation['variation_id'];
                     }
@@ -58,6 +61,7 @@ function vsc_ajax_decrease_item_to_cart_ajax_handler(){
                     if( $variation['attributes']['attribute_pa_price-type'] == 'price-per-item' ){
                         $variation_id = $variation['variation_id'];
                         $quantity = 1;
+                        
                     } else {
                         $oposite_variation_id = $variation['variation_id'];
                     }
@@ -77,8 +81,10 @@ function vsc_ajax_decrease_item_to_cart_ajax_handler(){
                 // If the new item price per kg
                 if($variation_per_kg_or_item){
                     $new_quantity = $oposite_item_count_in_cart - 0.5;
+                    $vsc_product_unit_type = 'ק״ג';
                 } else {
                     $new_quantity = ceil($oposite_item_count_in_cart - 1);
+                    $vsc_product_unit_type = 'יח׳';
                 }
 
                 $decreased_from_cart = WC()->cart->add_to_cart($product_id, $new_quantity, $variation_id);
@@ -89,8 +95,10 @@ function vsc_ajax_decrease_item_to_cart_ajax_handler(){
                 // If the new item price per kg
                 if($variation_per_kg_or_item){
                     $new_quantity = $old_item_count - 0.5;
+                    $vsc_product_unit_type = 'ק״ג';
                 } else {
                     $new_quantity = $old_item_count - 1;
+                    $vsc_product_unit_type = 'יח׳';
                 }
                 $decreased_from_cart = vsc_set_cart_item_new_quantity($product_id, $new_quantity);
             }
@@ -98,10 +106,10 @@ function vsc_ajax_decrease_item_to_cart_ajax_handler(){
         // start else for simple item
         } else {
 
-            //echo "Hello";
             //For simple product
             $new_quantity = $old_quantity - 1;
             $decreased_from_cart = vsc_set_cart_item_new_quantity($product_id, $new_quantity);
+            $vsc_product_unit_type = vsc_get_product_unit_type_for_simple_product($product_id);
             
         }
 
@@ -116,7 +124,7 @@ function vsc_ajax_decrease_item_to_cart_ajax_handler(){
             $data = array(
                 'success' => true,
                 'current_count' => vsc_get_item_qty_by_product_id($product_id),
-                'added_product_html' => vsc_get_product_added_cart_popup($product_id),
+                'added_product_html' => vsc_get_product_added_cart_popup($product_id, $vsc_product_unit_type),
             );
             echo wp_send_json($data);
     

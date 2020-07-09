@@ -9,6 +9,8 @@ function vsc_ajax_add_to_cart_product_popup_ajax_handler(){
     $product = wc_get_product( $product_id );
     $quantity = 1;
 
+    $vsc_product_unit_type = '';
+
     if(isset($_POST['vsc_product_note'])){
         $vsc_product_note = $_POST['vsc_product_note'];
     } else {
@@ -39,10 +41,12 @@ function vsc_ajax_add_to_cart_product_popup_ajax_handler(){
                     if( $variation['attributes']['attribute_pa_price-type'] == 'price-per-kg' ){
                         $variation_id = $variation['variation_id'];
                         $quantity = 0.5;
+                        $vsc_product_unit_type = 'ק״ג';
                     }
                 } else {
                     if( $variation['attributes']['attribute_pa_price-type'] == 'price-per-item' ){
                         $variation_id = $variation['variation_id'];
+                        $vsc_product_unit_type = 'יח׳';
                     }
                 }
                 
@@ -55,6 +59,7 @@ function vsc_ajax_add_to_cart_product_popup_ajax_handler(){
             
         } else {
             $added_to_cart = WC()->cart->add_to_cart($product_id, $quantity);
+            $vsc_product_unit_type = vsc_get_product_unit_type_for_simple_product($product_id);
         }
 
         if($added_to_cart){
@@ -62,7 +67,7 @@ function vsc_ajax_add_to_cart_product_popup_ajax_handler(){
 
             $product_added_cart_count = vsc_get_item_qty_by_product_id($product_id);
 
-            $product_added_popup = vsc_get_product_added_cart_popup($product_id);
+            $product_added_popup = vsc_get_product_added_cart_popup($product_id, $vsc_product_unit_type);
 
             if($vsc_product_note){
                 $product->update_meta_data( 'vsc_product_note', sanitize_text_field( $vsc_product_note ) );

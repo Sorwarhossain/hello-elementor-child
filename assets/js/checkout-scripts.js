@@ -101,7 +101,7 @@
 
         $.ajax({
             type: 'post',
-            url: vsc_loadmore.ajaxurl,
+            url: vsc_checkout_data.ajaxurl,
             data: data,
             beforeSend: function (response) {
                 //$thisbutton.removeClass('added').addClass('loading');

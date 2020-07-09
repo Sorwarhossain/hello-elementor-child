@@ -2,107 +2,74 @@
 
 function vsc_loadmore_ajax_handler(){
 
-    //echo "Working";
-    $looped_products = 0;
-    $displayed_products = 0;
-    $displayable_count = 10;
-    $break_loop = false;
+    $cat_id = $_POST['cat_id'];
     $page = $_POST['page'];
-    $skipable_products = ((int)$page - 1) * $displayable_count;
-    $show_cat_title = false;
 
-
-    $cat_args = array(
-        'hide_empty' => true,
+    $args = array(
+        'post_type' => 'product',
+        'posts_per_page' => 20,
+        'post_status' => 'publish',
+        'paged' => $page,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $cat_id,
+            ),
+        ),
     );
-    $product_categories = get_terms( 'product_cat', $cat_args );
 
+    $loop = new WP_Query( $args );
 
-    if($product_categories && !$break_loop){
+    if ( $loop->have_posts() ) {
+        while ( $loop->have_posts() ) : $loop->the_post();
+            $product = wc_get_product();
+            $product_id = $product->get_id();
 
-        foreach($product_categories as $product_cat){
-            // If the products are displayed then just break the loop.
-            if($break_loop) continue;
-
-            if($show_cat_title){
-                echo '<li class="product vsc-product-item category-title" id="vsc_cat_'. $product_cat->slug .'"><h3 class="vsc_cat_title">'. $product_cat->name .'</h3></li>';
+            if(!vsc_get_item_qty_by_product_id($product_id) > 0){
+                $vsc_already_in_cart = 'vsc_already_in_cart';
+            } else {
+                $vsc_already_in_cart = '';
             }
-            
 
-            $args = array(
-                'post_type' => 'product',
-                'posts_per_page' => -1,
-                'post_status' => 'publish',
-                'tax_query' => array(
-                    array(
-                        'taxonomy' => 'product_cat',
-                        'field'    => 'slug',
-                        'terms'    => $product_cat->slug,
-                    ),
-                ),
-            );
-
-            $loop = new WP_Query( $args );
-            if ( $loop->have_posts() && !$break_loop) {
-                while ( $loop->have_posts() && !$break_loop) : $loop->the_post();
-
-                    // The loop will not work until the above product has gone
-                    $looped_products++;
-                    if($looped_products <= $skipable_products) {
-                        continue;
-                    }
-                    $show_cat_title = true;
-
-                    $product = wc_get_product();
-                    $product_id = $product->get_id();
-
-
-                    $related_product_html = vsc_get_related_product_html($product_id);
-                    $has_related_product = '';
-                    if($related_product_html){
-                        $has_related_product = 'has_related_product';
-                    } else {
-                        $related_product_html = '';
-                    }
-                    ?>
-
-                    <li class="product vsc-product-item vsc-only-product <?php echo $has_related_product; ?>">
-                        <?php echo $related_product_html; ?>
-                        <div class="vsc-product-inner">
-                            <div class="vsc-product-thumb">
-                                <figure class="figure">
-                                    <?php the_post_thumbnail($product_id, 'shop_catalog'); ?>
-                                </figure>
-                                <div class="vsc-product-thumb-hover">
-                                <?php
-                                    $vsc_product_loop_cart_icons = vsc_get_product_loop_cart_icons($product_id);
-                                    echo $vsc_product_loop_cart_icons;
-                                ?>
-                                </div>
-                                <?php echo vsc_cart_added_items_count_by_product_id($product_id); ?>
-                            </div>
-                            <div class="vsc-product-content">
-                                <div class="vsc-product-price">
-                                    <?php echo $product->get_price_html(); ?>
-                                </div>
-                                <h3 class="title"><a href="#" data-id="<?php echo $product_id; ?>"><?php the_title(); ?></a></h3>
-                            </div>
-                        </div>    
-                    </li>
-                    <?php
-                    $displayed_products++;
-                    if($displayed_products == $displayable_count) $break_loop = true;
-
-                endwhile;
-                wp_reset_postdata();
+            $related_product_html = vsc_get_related_product_html($product_id);
+            $has_related_product = '';
+            if($related_product_html){
+                $has_related_product = 'has_related_product';
+            } else {
+                $related_product_html = '';
             }
-            
+            ?>
 
+                <li class="product vsc-product-item vsc-only-product <?php echo $has_related_product; ?> <?php echo $vsc_already_in_cart; ?>">
+                    <?php echo $related_product_html; ?>
+                    <div class="vsc-product-inner">
+                        <div class="vsc-product-thumb">
+                            <figure class="figure">
+                                <?php the_post_thumbnail($product_id, 'shop_catalog'); ?>
+                            </figure>
+                            <div class="vsc-product-thumb-hover">
+                            <?php
+                                $vsc_product_loop_cart_icons = vsc_get_product_loop_cart_icons($product_id);
+                                echo $vsc_product_loop_cart_icons;
+                            ?>
+                            </div>
+                            <?php echo vsc_cart_added_items_count_by_product_id($product_id); ?>
+                        </div>
+                        <div class="vsc-product-content">
+                            <div class="vsc-product-price">
+                                <?php echo $product->get_price_html(); ?>
+                            </div>
+                            <h3 class="title"><a href="#" data-id="<?php echo $product_id; ?>"><?php the_title(); ?></a></h3>
+                        </div>
+                    </div>    
+                </li>
 
-        } // end of main category foreach
+        <?php
+        endwhile;
+        wp_reset_postdata();
+    }
 
-    } // End of if
-    
     
 	die; // here we exit the script and even no wp_reset_query() required!
 }

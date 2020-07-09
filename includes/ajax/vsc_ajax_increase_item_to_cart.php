@@ -10,6 +10,8 @@ function vsc_ajax_increase_item_to_cart_ajax_handler(){
     $quantity = 1;
     $error = false;
 
+    $vsc_product_unit_type = '';
+
     if(isset($_POST['vsc_product_note'])){
         $vsc_product_note = $_POST['vsc_product_note'];
     } else {
@@ -38,12 +40,15 @@ function vsc_ajax_increase_item_to_cart_ajax_handler(){
                     if( $variation['attributes']['attribute_pa_price-type'] == 'price-per-kg' ){
                         $variation_id = $variation['variation_id'];
                         $quantity = 0.5;
+                        $vsc_product_unit_type = 'ק״ג';
+
                     } else {
                         $oposite_variation_id = $variation['variation_id'];
                     }
                 } else {
                     if( $variation['attributes']['attribute_pa_price-type'] == 'price-per-item' ){
                         $variation_id = $variation['variation_id'];
+                        $vsc_product_unit_type = 'יח׳';
                     } else {
                         $oposite_variation_id = $variation['variation_id'];
                     }
@@ -59,8 +64,12 @@ function vsc_ajax_increase_item_to_cart_ajax_handler(){
 
                 if($variation_per_kg_or_item){
                     $quantity = $oposite_item_count_in_cart + 0.5;
+                    $vsc_product_unit_type = 'ק״ג';
+
                 } else {
                     $quantity = floor($oposite_item_count_in_cart + 1);
+                    $vsc_product_unit_type = 'יח׳';
+
                 }
 
                 $added_to_cart = WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
@@ -76,13 +85,14 @@ function vsc_ajax_increase_item_to_cart_ajax_handler(){
         } else {
             // this is not a variable product
             $added_to_cart = WC()->cart->add_to_cart($product_id, $quantity);
+            $vsc_product_unit_type = vsc_get_product_unit_type_for_simple_product($product_id);
         }
 
         // If item successfully added to cart
         if($added_to_cart){
             do_action('woocommerce_ajax_added_to_cart', $product_id);
 
-            $product_added_popup = vsc_get_product_added_cart_popup($product_id);
+            $product_added_popup = vsc_get_product_added_cart_popup($product_id, $vsc_product_unit_type);
 
             if($vsc_product_note){
                 $product->update_meta_data( 'vsc_product_note', sanitize_text_field( $vsc_product_note ) );
