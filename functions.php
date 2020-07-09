@@ -49,13 +49,32 @@ function vsc_child_enqueue() {
     wp_enqueue_script('child-navpoints', get_stylesheet_directory_uri() . '/assets/js/jquery.navpoints.js', array(), false, true);
     wp_enqueue_script('magnific-js', get_stylesheet_directory_uri() . '/assets/js/jquery.magnific-popup.min.js', array(), false, true);
     wp_enqueue_script('slick-js', get_stylesheet_directory_uri() . '/assets/js/slick.min.js', array(), false, true);
-    wp_enqueue_script('child-scripts', get_stylesheet_directory_uri() . '/assets/js/child-scripts.js', array(), false, true);
 
-    
-    
+    wp_enqueue_script('child-scripts', get_stylesheet_directory_uri() . '/assets/js/child-scripts.js', array(), false, true);
     wp_localize_script( 'child-scripts', 'vsc_loadmore', array(
 		'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
     ));
+
+    wp_enqueue_script('child-autocomplete', get_stylesheet_directory_uri() . '/assets/js/child-autocomplete.js', array(), false, true);
+
+
+    $shipping_cities = get_posts( array(
+        'post_type'   => 'shipping_city',
+        'numberposts' => -1,
+        'fields' => array('post_title'),
+    ) );
+    $shipping_city_names = array();
+    if(!empty($shipping_cities)){
+        foreach($shipping_cities as $city){
+            $shipping_city_names[] = $city->post_title;
+        }
+    }
+
+    wp_localize_script( 'child-autocomplete', 'vsc_autocomplete', array(
+		'shipping_city_names' => $shipping_city_names, // WordPress AJAX
+    ));
+
+    
     
 
     // load if checkout page
@@ -69,6 +88,9 @@ function vsc_child_enqueue() {
         
 }
 add_action( 'wp_enqueue_scripts', 'vsc_child_enqueue', PHP_INT_MAX);
+
+
+
 
 // Support SVG file upload
 function add_file_types_to_uploads($file_types){

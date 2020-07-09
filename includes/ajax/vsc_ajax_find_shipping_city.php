@@ -32,7 +32,7 @@ $weekly_available_times = get_field( "weekly_available_times" );
 
 ?>   
         <div class="city_search_result_wrapper">
-            <h3>איזה כיף! אנחנו מגיעים לתל אביב!</h3>
+            <h3>אנחנו באים לעיר שלך</h3>
             
             
             <?php if(!empty($weekly_available_times)) : ?>

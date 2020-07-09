@@ -1398,3 +1398,38 @@ h2.vsc_cart_title {
     background-color: transparent;
     color: #838383 !important;
 }
+
+
+
+/* Styles for autocomplte city field */
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 4px;
+    right: 0;
+    width: calc(100% - 8px);
+    max-height: 200px;
+    overflow-y: scroll;
+}
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+}
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+} 
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+    background-color:#e9e9e9 !important; 
+}

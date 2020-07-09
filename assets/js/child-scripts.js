@@ -504,6 +504,7 @@
 
 
         //On submit of city search form
+        $('#form-field-vsc_city_name').attr('autocomplete', 'off');
         $('#vsc_find_city_form').on('submit', function(e){
             e.preventDefault();
 
@@ -529,9 +530,28 @@
                         $('#city_search_no_result').css('display', 'none');
                         $('#city_search_result').css('display', 'block');
                         $('#city_search_result .elementor-widget-wrap').html(response);
+
+                        var add_city_name =  setInterval(function(){
+                            $("#vsc_find_city_form :input[id='form-field-vsc_city_name']").val(vsc_city_name);
+                        }, 100);
+
+                        $("#vsc_find_city_form :input[id='form-field-vsc_city_name']").live('click', function(){
+                            clearInterval(add_city_name);
+                        });
+                        // $(document).ajaxStop(function() {
+                        //     clearInterval(add_city_name);
+                        // });
+
                     } else {
                         $('#city_search_result').css('display', 'none');
                         $('#city_search_no_result').css('display', 'block');
+
+                        var add_city_name =  setInterval(function(){
+                            $("#vsc_find_city_form :input[id='form-field-vsc_city_name']").val(vsc_city_name);
+                        }, 100);
+                        $("#vsc_find_city_form :input[id='form-field-vsc_city_name']").live('click', function(){
+                            clearInterval(add_city_name);
+                        });
                     }
                 },
             });
