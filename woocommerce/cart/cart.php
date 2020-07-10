@@ -33,6 +33,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 				$_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 				$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 
+				$vsc_product = wc_get_product( $product_id );
+
 				if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
 					$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
 					?>
@@ -67,21 +69,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 						<td class="product-name" data-title="<?php esc_attr_e( 'Product', 'woocommerce' ); ?>">
 							<?php
-							if ( ! $product_permalink ) {
-								echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . '&nbsp;' );
-							} else {
-								echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $_product->get_name() ), $cart_item, $cart_item_key ) );
-							}
-
-							do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key );
-
-							// Meta data.
-							echo wc_get_formatted_cart_item_data( $cart_item ); // PHPCS: XSS ok.
-
-							// Backorder notification.
-							if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ) {
-								echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'woocommerce' ) . '</p>', $product_id ) );
-							}
+							echo '<a href="#">'. get_the_title($product_id) .'</a>';
 
 							$vsc_product_sublabel = $_product->get_meta('vsc_product_sublabel') ? $_product->get_meta('vsc_product_sublabel') : '';
 							if(!empty($vsc_product_sublabel)){
@@ -127,67 +115,10 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 
 
-
-<div class="product-add-to-cart">
-    <?php 
-    $product_added_cart_count = vsc_get_item_qty_by_product_id($product_id);
-    if($product_added_cart_count){
-        $style1 = 'style="display: flex;"';
-        $style2 = 'style="display: none;"';
-    } else {
-        $style1 = 'style="display: none;"';
-        $style2 = 'style="display: inline-block;"';
-    }
-
-
-    if($_product->is_type('variable')){
-
-        $price_per_item = false;
-        $price_per_kg = false;
-
-        $variations = $_product->get_available_variations();
-
-
-        if( !empty($variations) ){
-
-            foreach($variations as $variation){
-
-                if( isset($variation['attributes']['attribute_pa_price-type']) ){
-
-
-                    if($variation['attributes']['attribute_pa_price-type'] == 'price-per-item' ) {
-                        $price_per_item = $variation['display_price'];
-                    } 
-
-                    if( $variation['attributes']['attribute_pa_price-type'] == 'price-per-kg' ) {
-                        $price_per_kg = $variation['display_price'];
-                    }
-                }
-            }
-
-            if($price_per_item && $price_per_kg){
-                echo get_vsc_unit_switcher_html($price_per_kg);
-            }
-
-        }
-        
-    }
-    ?>
-    
-
-    <div class="vsc_increase_decrease_items_popup" <?php echo $style1; ?>>
-        <div class="vsc_increase_decrease_plus">
-            <a href="#" class="vsc_increase_decrease_plus_button" data-id="<?php echo $product_id; ?>"></a>
-        </div>
-        <div class="vsc_increase_decrease_count"><?php echo $product_added_cart_count; ?></div>
-        <div class="vsc_increase_decrease_minus">
-            <a href="#" class="vsc_increase_decrease_minus_button" data-id="<?php echo $product_id; ?>"></a>
-        </div>
-    </div>
-    
-    <button class="vsc_add_to_cart_on_popup" data-id="<?php echo $product_id; ?>" <?php echo $style2; ?>>הוספה לעגלה</button>
-
-</div>
+<?php  
+$vsc_product_loop_cart_icons = vsc_get_product_loop_cart_icons($product_id);
+echo $vsc_product_loop_cart_icons;
+?>
 
 
 
@@ -200,9 +131,23 @@ do_action( 'woocommerce_before_cart' ); ?>
 						</td>
 
 						<td class="product-subtotal" data-title="<?php esc_attr_e( 'Subtotal', 'woocommerce' ); ?>">
-							<?php
-								echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
-							?>
+							<div class="vsc_total_price">
+								<?php
+									echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
+								?>
+							</div>
+
+							<div class="vsc_item_price">
+								<?php 
+								// check if simple product
+								// if($_product->is_type('simple')){
+								// 	echo $_product->get_price_html();
+								// } else {
+								// 	// else varialbe product
+								// }
+								echo $vsc_product->get_price_html();
+								?>
+							</div>
 						</td>
 					</tr>
 					<?php

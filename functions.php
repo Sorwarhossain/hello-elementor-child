@@ -192,11 +192,12 @@ add_filter('woocommerce_stock_amount', 'floatval');
 
 
 
-add_filter( 'woocommerce_get_price_html', 'vsc_custom_price_html', 100, 2 );
+add_filter( 'woocommerce_get_price_html', 'vsc_custom_price_html', 9999999, 2 );
 function vsc_custom_price_html( $price, $product ){
 
     // Simple product with sale price
-    if($product->is_type('variable') != 'variable'&& $product->is_on_sale() ){
+    if(! $product->is_type('variable') && $product->is_on_sale() ){
+
         $vsc_product_unit_label = $product->get_meta('vsc_product_unit_label');
 
         $price = str_replace( '<ins>', '<ins><span class="vsc_price_icon">' . $vsc_product_unit_label . ' / </span>', $price );
@@ -205,7 +206,8 @@ function vsc_custom_price_html( $price, $product ){
     }
 
     // Simpple product
-    if($product->is_type('variable') != 'variable'&& !$product->is_on_sale() ){
+    if(!$product->is_type('variable') && !$product->is_on_sale() ){
+
         $vsc_product_unit_label = $product->get_meta('vsc_product_unit_label');
 
         $price = str_replace( '<span class="woocommerce-Price-amount amount">', '<span class="woocommerce-Price-amount amount"><span class="vsc_price_icon">' . $vsc_product_unit_label . ' / </span>', $price );
@@ -215,6 +217,7 @@ function vsc_custom_price_html( $price, $product ){
 
 
     if($product->is_type('variable')){
+
 
         $p_price = 0;
 
@@ -240,10 +243,17 @@ function vsc_custom_price_html( $price, $product ){
 
 add_filter( 'nav_menu_link_attributes', 'vsc_custom_main_menu_atts', 10, 3 );
 function vsc_custom_main_menu_atts( $atts, $item, $args ){
-
-
-
     $atts['cat_id'] = $item->object_id;
     return $atts;
+}
+
+
+// Remove extenal and group product type
+add_filter( 'product_type_selector', 'remove_product_types' );
+function remove_product_types( $types ){
+    unset( $types['grouped'] );
+    unset( $types['external'] );
+
+    return $types;
 }
 

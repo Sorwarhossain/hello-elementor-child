@@ -835,11 +835,11 @@ li.product.vsc-product-item.vsc-only-product.has_related_product:hover > .vsc-pr
 }
 .vsc-product-details-popup .product-add-to-cart {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: flex-end;
 }
-.vsc-product-details-popup .product-add-to-cart label.switch {
-    margin-bottom: 15px;
+.vsc-product-details-popup.vsc-simple .vsc_unit_type {
+    display: none;
 }
 .vsc_product_note {
     margin-top: 30px;
@@ -848,6 +848,9 @@ li.product.vsc-product-item.vsc-only-product.has_related_product:hover > .vsc-pr
 .vsc_product_note input {
     max-width: 300px;
     height: 35px;
+}
+.vsc_cart_sidebar .vsc_price_icon {
+    font-size: 11px;
 }
 
 
@@ -1303,7 +1306,7 @@ p.vsc_checkout_price_table_notice {
 .vsc_cart_sidebar .product-add-to-cart {
     text-align: center;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
@@ -1588,4 +1591,22 @@ h2.vsc_cart_title {
 }
 .vsc_edit_note span {
     font-size: 12px;
+}
+.vsc_total_price span.woocommerce-Price-amount.amount {
+    font-size: 15px !important;
+    font-weight: 700;
+}
+.vsc_item_price span.woocommerce-Price-amount.amount {
+    font-size: 12px !important;
+}
+.vsc_item_price span.woocommerce-Price-amount.amount span.vsc_price_icon {
+    font-size: 11px;
+}
+.vsc_item_price span.woocommerce-Price-amount.amount span.woocommerce-Price-currencySymbol {
+    font-size: 15px;
+}
+.vsc_cart_sidebar .product-add-to-cart .vsc_unit_type {
+    margin-bottom: 0;
+    font-size: 11px;
+    line-height: 14px;
 }

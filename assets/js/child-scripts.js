@@ -123,6 +123,9 @@
 
         // Increase the item count
         $('.vsc_increase_decrease_plus_button').live('click', function(e){
+
+    
+
             e.preventDefault();
 
             var clicked_button = $(this);
@@ -152,7 +155,8 @@
                 url: vsc_loadmore.ajaxurl,
                 data: data,
                 beforeSend: function (response) {
-                    //$thisbutton.removeClass('added').addClass('loading');
+                    //$thisbutton.removeClass('added').addClass('loading');\
+                    console.log(data);
                 },
                 complete: function (response) {
                     //$thisbutton.addClass('added').removeClass('loading');

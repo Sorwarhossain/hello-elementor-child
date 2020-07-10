@@ -17,7 +17,7 @@ function vsc_ajax_load_product_details_handler(){
 ?>
 
 
-    <div class="white-popup vsc-product-details-popup">
+    <div class="white-popup vsc-product-details-popup vsc-<?php echo $product->get_type(); ?>">
         <div class="vsc-product-details-popup-inner">
             <section id="vsc-product-details">
                 <div class="vsc-product-details-container">
@@ -28,10 +28,12 @@ function vsc_ajax_load_product_details_handler(){
                         </div>
                         
                         <?php
-                        include get_stylesheet_directory() . '/template-parts/add-to-cart.php';
+                        //include get_stylesheet_directory() . '/template-parts/add-to-cart.php';
                         //echo ;
                        // include(dirname(__FILE__) . '/custom_template.php'); 
                         //inclue 'template-parts/add-to-cart';
+                        $vsc_product_loop_cart_icons = vsc_get_product_loop_cart_icons($product_id);
+                        echo $vsc_product_loop_cart_icons;
 
                         $vsc_product_note = $product->get_meta('vsc_product_note') ? $product->get_meta('vsc_product_note') : '';
                         ?>
