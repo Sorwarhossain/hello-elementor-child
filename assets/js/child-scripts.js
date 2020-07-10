@@ -310,46 +310,6 @@
 
 
 
-
-
-        
-        $(document).ajaxComplete(function(){
-            var product_html = $('.dgwt-wcas-suggestion-product').parent().html();
-            console.log(product_html);
-            $('.dgwt-wcas-suggestion.dgwt-wcas-suggestion-product.dgwt-wcas-suggestion-selected').unbind();
-        });
-
-        $('.dgwt-wcas-suggestion.dgwt-wcas-suggestion-product.dgwt-wcas-suggestion-selected').unbind();
-
-        $('.dgwt-wcas-suggestion.dgwt-wcas-suggestion-product.dgwt-wcas-suggestion-selected').live('click', function(e){
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            $(this).unbind();
-            alert('clicked');
-        });
-
-        $(document).live('keypress', function(e){
-            
-            if(e.keyCode == 13) {
-                alert('Enter pressed');
-                e.preventDefault();
-                e.stopImmediatePropagation();
-            }
-            // e.preventDefault();
-            // e.stopImmediatePropagation();
-            // $(this).unbind();
-            // alert('clicked');
-        });
-
-        $('form.dgwt-wcas-search-form').bind("keypress", function(e) {
-            if (e.keyCode == 13) {               
-              e.preventDefault();
-              return false;
-            }
-          });
-
-
-
         //On submit of city search form
         $('#form-field-vsc_city_name').attr('autocomplete', 'off');
         $('#vsc_find_city_form').on('submit', function(e){

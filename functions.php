@@ -9,6 +9,7 @@ require_once 'includes/vsc_custom_post_types.php';
 // Including Shortcode Files
 require_once 'includes/shortcodes/vsc_products_shortcode.php';
 require_once 'includes/shortcodes/vsc_list_categories.php';
+require_once 'includes/shortcodes/vsc_product_search_form_shortcode.php';
 
 // Including Ajax Files
 require_once 'includes/ajax/vsc_loadmore_ajax.php';
@@ -62,7 +63,6 @@ function vsc_child_enqueue() {
     $shipping_cities = get_posts( array(
         'post_type'   => 'shipping_city',
         'numberposts' => -1,
-        'fields' => array('post_title'),
     ) );
     $shipping_city_names = array();
     if(!empty($shipping_cities)){
@@ -71,8 +71,37 @@ function vsc_child_enqueue() {
         }
     }
 
+    $products = get_posts( array(
+        'post_type'   => 'product',
+        'numberposts' => -1,
+    ) );
+
+    //echo var_dump($products);
+    $products_array = array();
+    if(!empty($products)){
+        foreach($products as $product){
+
+            if(has_post_thumbnail( $product->ID )){
+                $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $product->ID ), 'thumbnail' );
+                $products_array[] = array(
+                    'id' => $product->ID,
+                    'name' => $product->post_title,
+                    'thumb_url' => $thumbnail[0],
+                );
+            } else {
+                $products_array[] = array(
+                    'id' => $product->ID,
+                    'name' => $product->post_title,
+                    'thumb_url' => '',
+                );
+            }
+            
+        }
+    }
+
     wp_localize_script( 'child-autocomplete', 'vsc_autocomplete', array(
 		'shipping_city_names' => $shipping_city_names, // WordPress AJAX
+		'product_names' => $products_array, // WordPress AJAX
     ));
 
     
@@ -111,32 +140,24 @@ add_filter('upload_mimes', 'add_file_types_to_uploads');
 // Disable single product page
 // it will redirect to homepage
 
-// function vsc_redirect_to_home() {
-//     if(!is_admin() && is_product()) {
-//       wp_redirect(home_url());
-//       exit();
-//     }
-//   }
-//   add_action('template_redirect', 'vsc_redirect_to_home');
-
-
-// Redirect to checkout page if anyone try to visit cart page
 function vsc_redirect_to_home() {
+    if(!is_admin() && is_product()) {
+      wp_redirect(home_url());
+      exit();
+    }
+}
+add_action('template_redirect', 'vsc_redirect_to_home');
+// Redirect to checkout page if anyone try to visit cart page
+function vsc_redirect_to_checkout() {
     if(!is_admin() && is_cart()) {
         global $woocommerce;
         $cw_redirect_url_checkout = $woocommerce->cart->get_checkout_url();
         wp_redirect($cw_redirect_url_checkout);
         exit();
     }
-  }
-  add_action('template_redirect', 'vsc_redirect_to_home');
-
-add_filter('add_to_cart_redirect', 'vsc_redirect_add_to_cart');
-function vsc_redirect_add_to_cart() {
-    global $woocommerce;
-    $cw_redirect_url_checkout = $woocommerce->cart->get_checkout_url();
-    return $cw_redirect_url_checkout;
 }
+add_action('template_redirect', 'vsc_redirect_to_home');
+
 
 
 
