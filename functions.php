@@ -23,6 +23,8 @@ require_once 'includes/ajax/vsc_ajax_find_shipping_city.php';
 require_once 'includes/ajax/vsc_ajax_load_city_checkout_times.php';
 require_once 'includes/ajax/vsc_generate_product_quantity_html.php';
 require_once 'includes/ajax/vsc_remove_items_from_cart.php';
+require_once 'includes/ajax/vsc_ajax_load_add_note_popup.php';
+require_once 'includes/ajax/vsc_save_product_note_on_popup.php';
 
 
 
@@ -52,9 +54,14 @@ function vsc_child_enqueue() {
     wp_enqueue_script('slick-js', get_stylesheet_directory_uri() . '/assets/js/slick.min.js', array(), false, true);
     
     wp_enqueue_script('child-scripts', get_stylesheet_directory_uri() . '/assets/js/child-scripts.js', array(), false, true);
+
+    global $woocommerce;
+    $vsc_cart_item_count = $woocommerce->cart->cart_contents_count;
+
     wp_localize_script( 'child-scripts', 'vsc_loadmore', array(
         'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
         'vsc_home_url' => site_url(),
+        'vsc_cart_item_count' => $vsc_cart_item_count,
     ));
 
     wp_enqueue_script('child-autocomplete', get_stylesheet_directory_uri() . '/assets/js/child-autocomplete.js', array(), false, true);

@@ -617,8 +617,86 @@
 
     });
 
+
+    $('.jet-mobile-menu-widget').after('<div class="vsc_menu__toggle_count">'+ vsc_loadmore.vsc_cart_item_count +'</div>');
+    $('.vsc_menu__toggle_count').live('click', function(){
+        $(this).siblings().find('.jet-mobile-menu__toggle').trigger('click');
+    });
+
+
+
+    var NotemagnificPopup = $.magnificPopup.instance;
+
+    $('.vsc_edit_product_note').live('click', function(e){
+        e.preventDefault();
+
+        var product_id = $(this).attr('product_id');
+        var data = {
+            action: 'vsc_ajax_load_add_note_popup',
+            product_id: product_id,
+        };
+        $.ajax({
+            type: 'post',
+            url: vsc_loadmore.ajaxurl,
+            data: data,
+            beforeSend: function (response) {
+                //$thisbutton.removeClass('added').addClass('loading');
+                //console.log(data);
+            },
+            complete: function (response) {
+                //$thisbutton.addClass('added').removeClass('loading');
+            },
+            success: function (html) {
+
+                NotemagnificPopup.open({
+                    items: {
+                        src: html, // can be a HTML string, jQuery object, or CSS selector
+                        type: 'inline'
+                    }
+                });
+
+            },
+        });
+
+
+    });
     
 
+    $('.vsc_save_note').live('click', function(e){
+        e.preventDefault();
+
+        var product_id = $(this).attr('product_id');
+        var value = $(this).siblings('#product_popup_note').val();
+
+        var data = {
+            action: 'vsc_ajax_save_product_note_on_popup',
+            product_id: product_id,
+            value: value
+        };
+        $.ajax({
+            type: 'post',
+            url: vsc_loadmore.ajaxurl,
+            data: data,
+            beforeSend: function (response) {
+
+            },
+            success: function (response) {
+                if(response){
+
+                    $('.vsc_edit_product_note').each(function(){
+                        var note_product_id = $(this).attr('product_id');
+                        if(note_product_id == product_id){
+                            $(this).siblings('span').text(value);
+                        }
+                    });
+
+                    NotemagnificPopup.close();
+
+                }
+            },
+        });
+        
+    });
 
 
 	
