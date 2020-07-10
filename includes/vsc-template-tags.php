@@ -9,6 +9,9 @@ function vsc_get_product_loop_cart_icons($product_id){
 
     $product_added_cart_count = vsc_get_item_qty_by_product_id($product_id);
 
+    
+
+
     if($product_added_cart_count){
         $style1 = 'style="display: flex;"';
         $style2 = 'style="display: none;"';
@@ -27,7 +30,7 @@ function vsc_get_product_loop_cart_icons($product_id){
         </div>
     </div>';
     
-    $output .= '<button class="vsc_add_to_cart_on_popup" data-id="'. $product_id .'" '. $style2 .' ></button>';
+    $output .= '<button class="vsc_add_to_cart_on_popup" data-id="'. $product_id .'" '. $style2 .' >הוספה לעגלה</button>';
 
     $output .= '<div class="vsc_unit_type">';
 
@@ -56,8 +59,14 @@ function vsc_get_product_loop_cart_icons($product_id){
                 }
             }
 
+            // Get the unit type on the cart
+            $vsc_added_item_unit_type = '';
+            if($product_added_cart_count){
+                $vsc_added_item_unit_type = vsc_get_unit_type_of_added_item_in_cart($product_id);
+            }
+
             if($price_per_item && $price_per_kg){
-                $output .= get_vsc_unit_switcher_html($price_per_kg);
+                $output .= get_vsc_unit_switcher_html($price_per_kg, $vsc_added_item_unit_type);
             }
 
         }
@@ -70,17 +79,34 @@ function vsc_get_product_loop_cart_icons($product_id){
     }
     $output .= '</div>';
 
-
-
     $output .= '</div>';
-
-
-
-
-
 
     return $output;
 
+}
+
+
+
+function get_vsc_unit_switcher_html($price_per_kg, $vsc_added_item_unit_type = ''){
+
+    $output = '<label class="switch">';
+
+        if(!empty($vsc_added_item_unit_type) && $vsc_added_item_unit_type == 'price-per-item'){
+            $checked = '';
+        } else {
+            $checked = 'checked="checked"';
+        }
+        
+
+        $output .= '<input type="checkbox" id="product_unit_switch" '. $checked .'>';
+        $output .= '
+            <div class="slider round">
+                <span class="off">יח׳</span>
+                <span class="on">ק״ג</span>
+            </div>';
+    $output .= '</label>';
+
+    return $output;
 }
 
 
@@ -153,21 +179,6 @@ function vsc_get_product_details_thumbnail($product_id){
                         
 }
 
-
-function get_vsc_unit_switcher_html($price_per_kg){
-    $output .= '<label class="switch">';
-
-        $checked = $price_per_kg ? 'checked="checked"' : '';
-        $output .= '<input type="checkbox" id="product_unit_switch" '. $checked .'>';
-        $output .= '
-            <div class="slider round">
-                <span class="off">יח׳</span>
-                <span class="on">ק״ג</span>
-            </div>';
-    $output .= '</label>';
-
-    return $output;
-}
 
                                             
 function vsc_cart_added_items_count_by_product_id($product_id){

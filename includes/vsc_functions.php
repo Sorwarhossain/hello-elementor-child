@@ -11,6 +11,26 @@ function vsc_get_item_qty_by_product_id( $product_id ){
     return false;
 }
 
+
+function vsc_get_unit_type_of_added_item_in_cart($product_id){
+
+    foreach( WC()->cart->get_cart() as $cart_item ){
+        if ( $product_id == $cart_item['product_id'] ){
+
+            $variation_attrs = wc_get_product($cart_item['variation_id'])->get_variation_attributes();
+
+            if(isset($variation_attrs['attribute_pa_price-type'])){
+
+                return $variation_attrs['attribute_pa_price-type'];
+                
+            }
+            // break;
+        }
+    }
+
+    return false;
+}
+
 function vsc_get_item_line_total_by_product_id( $product_id ){
 
     foreach( WC()->cart->get_cart() as $cart_item ){

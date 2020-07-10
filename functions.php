@@ -22,9 +22,13 @@ require_once 'includes/ajax/vsc_ajax_add_to_cart_product_details.php';
 require_once 'includes/ajax/vsc_ajax_find_shipping_city.php';
 require_once 'includes/ajax/vsc_ajax_load_city_checkout_times.php';
 require_once 'includes/ajax/vsc_generate_product_quantity_html.php';
-require_once 'includes/ajax/vsc_remove_items_from_cart.php';
 require_once 'includes/ajax/vsc_ajax_load_add_note_popup.php';
 require_once 'includes/ajax/vsc_save_product_note_on_popup.php';
+require_once 'includes/ajax/vsc_ajax_reload_cart_sidebar.php';
+require_once 'includes/ajax/vsc_ajax_remove_product_from_cart.php';
+
+
+
 
 
 
@@ -257,3 +261,6 @@ function remove_product_types( $types ){
     return $types;
 }
 
+
+
+// echo var_dump(get_option('test'));
