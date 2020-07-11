@@ -24,7 +24,7 @@ function vsc_get_product_loop_cart_icons($product_id){
         <div class="vsc_increase_decrease_plus">
             <a href="#" class="vsc_increase_decrease_plus_button" data-id="'.  $product_id .'"></a>
         </div>
-        <div class="vsc_increase_decrease_count">'. $product_added_cart_count .'</div>
+        <div class="vsc_increase_decrease_count" data-id="'. $product_id .'">'. $product_added_cart_count .'</div>
         <div class="vsc_increase_decrease_minus">
             <a href="#" class="vsc_increase_decrease_minus_button" data-id="'. $product_id .'"></a>
         </div>

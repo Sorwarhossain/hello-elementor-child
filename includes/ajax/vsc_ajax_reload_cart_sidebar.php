@@ -175,3 +175,19 @@ function vsc_ajax_reload_cart_sidebar_total_price_handler(){
 
     wp_die();
 }
+
+
+
+add_action('wp_ajax_vsc_update_cart_count', 'vsc_update_cart_count_handler');
+add_action('wp_ajax_nopriv_vsc_update_cart_count', 'vsc_update_cart_count_handler');
+
+function vsc_update_cart_count_handler(){
+    
+    global $woocommerce;
+    $vsc_cart_item_count = $woocommerce->cart->cart_contents_count;
+
+    echo $vsc_cart_item_count;
+
+    wp_die();
+}
+

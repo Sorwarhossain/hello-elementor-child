@@ -1620,3 +1620,6 @@ h2.vsc_cart_title {
 li.vsc-product-item .vsc_add_to_cart_on_popup {
     font-size: 0;
 }
+.jet-mobile-menu__instance--slide-out-layout.right-container-position .jet-mobile-menu__container {
+    right: -70%;
+}

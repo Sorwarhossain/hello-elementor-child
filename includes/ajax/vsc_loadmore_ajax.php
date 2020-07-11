@@ -41,7 +41,7 @@ function vsc_loadmore_ajax_handler(){
             }
             ?>
 
-                <li class="product vsc-product-item vsc-only-product <?php echo $has_related_product; ?> <?php echo $vsc_already_in_cart; ?>">
+                <li class="product vsc-product-item vsc-only-product <?php echo $has_related_product; ?> <?php echo $vsc_already_in_cart; ?>" data-id="<?php echo $product_id; ?>">
                     <?php echo $related_product_html; ?>
                     <div class="vsc-product-inner">
                         <div class="vsc-product-thumb">
