@@ -756,6 +756,8 @@
 
                     vsc_ajax_reload_cart_sidebar();
                     vsc_ajax_reload_cart_total_price();
+                    vsc_ajax_update_cart_icon_product_count();
+                    
 
                 }
             },
