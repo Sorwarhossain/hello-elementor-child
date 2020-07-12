@@ -114,6 +114,8 @@ function get_vsc_unit_switcher_html($price_per_kg, $vsc_added_item_unit_type = '
 
 function vsc_get_product_added_cart_popup($product_id, $vsc_product_unit_type){
 
+    $product = wc_get_product($product_id);
+    $price_html = $product->get_price_html();
     $product_thumbnail = get_the_post_thumbnail($product_id, 'thumbnail');
     $product_name = get_the_title($product_id);
     $product_added_cart_count = vsc_get_item_qty_by_product_id($product_id);
@@ -135,6 +137,7 @@ function vsc_get_product_added_cart_popup($product_id, $vsc_product_unit_type){
             </div>
             <div class="elementor-menu-cart__product-price product-price" data-title="Price">
                 {$product_line_total}
+                {$price_html}
             </div>
         </div>
 HTML;

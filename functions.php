@@ -263,4 +263,102 @@ function remove_product_types( $types ){
 
 
 
-// echo var_dump(get_option('test'));
+
+//Add Custom Data in WooCommerce Session
+add_filter('woocommerce_add_cart_item_data', 'vsc_add_custom_cart_item_data',1,2);
+if(!function_exists('vsc_add_custom_cart_item_data')){
+    function vsc_add_custom_cart_item_data($cart_item_data,$product_id)
+    {
+        /*Here, We are adding item in WooCommerce session with, wdm_user_custom_data_value name*/
+        global $woocommerce;
+        session_start();    
+        if (isset($_SESSION['vsc_product_note'])) {
+            $option = $_SESSION['vsc_product_note'];       
+            $new_value = array('vsc_product_note_value' => $option);
+        }
+        if(empty($option))
+            return $cart_item_data;
+        else {    
+            if(empty($cart_item_data))
+                return $new_value;
+            else
+                return array_merge($cart_item_data,$new_value);
+        }
+        unset($_SESSION['wdm_user_custom_data']); 
+        //Unset our custom session variable, as it is no longer needed.
+    }
+}
+
+
+//Extract Custom Data from WooCommerce Session and Insert it into Cart Object
+add_filter('woocommerce_get_cart_item_from_session', 'vsc_get_cart_items_from_session', 1, 3 );
+if(!function_exists('vsc_get_cart_items_from_session')) {
+    function vsc_get_cart_items_from_session($item, $values, $key) {
+        if (array_key_exists( 'vsc_product_note_value', $values ) ){
+            $item['vsc_product_note_value'] = $values['vsc_product_note_value'];
+        }       
+        return $item;
+    }
+}
+
+
+
+//Display User Custom Data on Cart and Checkout page
+add_filter('woocommerce_checkout_cart_item_quantity','vsc_add_user_custom_option_from_session_into_cart',1,3);  
+add_filter('woocommerce_cart_item_price','vsc_add_user_custom_option_from_session_into_cart',1,3);
+
+if(!function_exists('vsc_add_user_custom_option_from_session_into_cart')){
+ function vsc_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key )
+    {
+        /*code to add custom data on Cart & checkout Page*/    
+        if(count($values['vsc_product_note_value']) > 0)
+        {
+            $return_string = $product_name . "</a><dl class='variation'>";
+            $return_string .= "<table class='wdm_options_table' id='" . $values['product_id'] . "'>";
+            $return_string .= "<tr><td>" . $values['vsc_product_note_value'] . "</td></tr>";
+            $return_string .= "</table></dl>"; 
+            return $return_string;
+        }
+        else
+        {
+            return $product_name;
+        }
+    }
+}
+
+
+
+///dd Custom Data as Metadata to the Order Items
+
+add_action('woocommerce_add_order_item_meta','wdm_add_values_to_order_item_meta',1,2);
+if(!function_exists('wdm_add_values_to_order_item_meta'))
+{
+  function wdm_add_values_to_order_item_meta($item_id, $values)
+  {
+        global $woocommerce,$wpdb;
+        $user_custom_values = $values['vsc_product_note_value'];
+        if(!empty($user_custom_values))
+        {
+            wc_add_order_item_meta($item_id,'vsc_product_note',$user_custom_values);  
+        }
+  }
+}
+
+
+//Remove User Custom Data, if Product is Removed from Cart
+add_action('woocommerce_before_cart_item_quantity_zero','wdm_remove_user_custom_data_options_from_cart',1,1);
+if(!function_exists('wdm_remove_user_custom_data_options_from_cart'))
+{
+    function wdm_remove_user_custom_data_options_from_cart($cart_item_key)
+    {
+        global $woocommerce;
+        // Get cart
+        $cart = $woocommerce->cart->get_cart();
+        // For each item in cart, if item is upsell of deleted product, delete it
+        foreach( $cart as $key => $values)
+        {
+        if ( $values['vsc_product_note_value'] == $cart_item_key )
+            unset( $woocommerce->cart->cart_contents[ $key ] );
+        }
+    }
+}

@@ -12,10 +12,12 @@ function vsc_ajax_add_to_cart_product_popup_ajax_handler(){
     $vsc_product_unit_type = '';
 
     if(isset($_POST['vsc_product_note'])){
-        $vsc_product_note = $_POST['vsc_product_note'];
-    } else {
-        $vsc_product_note = false;
-    }
+
+        session_start();
+        $_SESSION['vsc_product_note'] = $_POST['vsc_product_note'];
+        
+    } 
+
 
     $error = false;
 
@@ -69,10 +71,7 @@ function vsc_ajax_add_to_cart_product_popup_ajax_handler(){
 
             $product_added_popup = vsc_get_product_added_cart_popup($product_id, $vsc_product_unit_type);
 
-            if($vsc_product_note){
-                $product->update_meta_data( 'vsc_product_note', sanitize_text_field( $vsc_product_note ) );
-                $product->save();
-            }
+            
 
             $data = array(
                 'success' => true,

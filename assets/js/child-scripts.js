@@ -366,9 +366,9 @@
                 $('.vsc_popup_cart_menu .elementor-menu-cart__products').html(object.added_product_html);
                 $('.vsc_popup_cart_menu').fadeIn();
 
-                setTimeout(function(){ 
-                    $('.vsc_popup_cart_menu').fadeOut();
-                }, 3000);
+                // setTimeout(function(){ 
+                //     $('.vsc_popup_cart_menu').fadeOut();
+                // }, 3000);
             }
 
             // reload the cart items

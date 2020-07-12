@@ -63,8 +63,9 @@ foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
                 <div class="vsc_edit_note">
                     <a href="#" class="vsc_edit_product_note" product_id="<?php echo $product_id; ?>"><i class="far fa-edit"></i></a>
                     <?php 
-                    $product_note = $_product->get_meta('vsc_product_note') ? $_product->get_meta('vsc_product_note') : '';
-                    echo '<span>'. $product_note .'</span>';
+                    if(isset($cart_item['vsc_product_note_value'])){
+                        echo '<span>'. $cart_item['vsc_product_note_value'] .'</span>';
+                    }
                     ?>
                     
                 </div>

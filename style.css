@@ -367,7 +367,7 @@ li.vsc_categories_item a.active {
     padding: 0;
 }
 .vsc_popup_cart_menu .elementor-menu-cart__product .product-thumbnail {
-    width: 60px;
+    width: 50px;
 }
 .vsc_popup_cart_menu .elementor-menu-cart__products {
     border: 0;
@@ -377,6 +377,7 @@ li.vsc_categories_item a.active {
 }
 .vsc_popup_cart_menu .elementor-menu-cart__product .product-name a {
     color: #111;
+    font-size: 13px;
 }
 .vsc_popup_cart_menu .elementor-menu-cart__product .product-price {
     color: #111;
@@ -1622,4 +1623,46 @@ li.vsc-product-item .vsc_add_to_cart_on_popup {
 }
 .jet-mobile-menu__instance--slide-out-layout.right-container-position .jet-mobile-menu__container {
     right: -70%;
+}
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price > * {
+    display: block;
+    order: 2;
+}
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price .woocommerce-Price-amount.amount {
+    font-size: 11px;
+    line-height: 10px;
+}
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price span.woocommerce-Price-currencySymbol {
+    font-size: 16px;
+}
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price span.vsc_price_icon {
+    font-size: 11px;
+    line-height: 10px;
+}
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price {
+    display: flex;
+    flex-direction: column;
+}
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price del {
+    order: 3;
+    line-height: 12px;
+}
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price > *:first-child {
+    font-size: 14px !important;
+    font-weight: 700;
+    margin-bottom: 1px;
+}
+
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price > *:first-child span.woocommerce-Price-currencySymbol {
+    font-size: 19px;
+}
+
+.vsc_popup_cart_menu .elementor-menu-cart__product .product-price .woocommerce-Price-amount.amount + .woocommerce-Price-amount.amount {
+    margin-top: 4px;
+}
+.vsc_login_form .uael-login-form-footer-link {
+    color: #1e824c;
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: -5px;
 }
