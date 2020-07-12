@@ -116,10 +116,6 @@ function custom_override_checkout_fields( $fields ) {
 
 
 
-
-
-
-
 /** =================================================
 * Add addtional fields to second checkout column
 * ================================================ */
@@ -216,3 +212,159 @@ function vsc_add_custom_additional_checkout_fields($checkout){
 
 
 
+/**
+ * Process the checkout
+ */
+add_action('woocommerce_checkout_process', 'vsc_my_custom_checkout_field_process');
+
+function vsc_my_custom_checkout_field_process() {
+    // Check if set, if its not set add an error.
+    if ( ! $_POST['vsc_checkout_delivery_date'] )
+        wc_add_notice( __( 'Please select a delivery date.' ), 'error' );
+
+    if ( ! $_POST['vsc_checkout_delivery_time'] )
+        wc_add_notice( __( 'Please select a delivery time.' ), 'error' );
+
+    if ( ! $_POST['vsc_payment_terms_services'] )
+        wc_add_notice( __( 'Please accept the terms and services.' ), 'error' );
+}
+
+
+
+/**
+ * Update the order meta with field value
+ */
+add_action( 'woocommerce_checkout_update_order_meta', 'vsc_my_custom_checkout_field_update_order_meta', 999 );
+
+function vsc_my_custom_checkout_field_update_order_meta( $order_id ) {
+
+
+    if ( ! empty( $_POST['vsc_checkout_delivery_date'] ) ) {
+        update_post_meta( $order_id, 'vsc_checkout_delivery_date', sanitize_text_field( $_POST['vsc_checkout_delivery_date'] ) );
+    }
+
+    if ( ! empty( $_POST['vsc_checkout_delivery_time'] ) ) {
+        update_post_meta( $order_id, 'vsc_checkout_delivery_time', sanitize_text_field( $_POST['vsc_checkout_delivery_time'] ) );
+    }
+
+    if ( ! empty( $_POST['vsc_want_alternative_prducts'] ) ) {
+
+        if($_POST['vsc_want_alternative_prducts'] == 1){
+            $vsc_want_alternative_prducts = 'Yes';
+        } else {
+            $vsc_want_alternative_prducts = 'No';
+        }
+        update_post_meta( $order_id, 'vsc_want_alternative_prducts', sanitize_text_field( $vsc_want_alternative_prducts ) );
+
+    }
+
+    if ( ! empty( $_POST['vsc_shipping_without_plastic_bag'] ) ) {
+        if($_POST['vsc_shipping_without_plastic_bag'] == 1){
+            $vsc_shipping_without_plastic_bag = 'Yes';
+        } else {
+            $vsc_shipping_without_plastic_bag = 'No';
+        }
+        update_post_meta( $order_id, 'vsc_shipping_without_plastic_bag', sanitize_text_field( $vsc_shipping_without_plastic_bag ) );
+
+    }
+
+    if ( ! empty( $_POST['vsc_shipping_general_comment'] ) ) {
+        update_post_meta( $order_id, 'vsc_shipping_general_comment', sanitize_text_field( $_POST['vsc_shipping_general_comment'] ) );
+    }
+
+    if ( ! empty( $_POST['vsc_shipping_note_to_messanger'] ) ) {
+        update_post_meta( $order_id, 'vsc_shipping_note_to_messanger', sanitize_text_field( $_POST['vsc_shipping_note_to_messanger'] ) );
+    }
+
+    if ( ! empty( $_POST['vsc_payment_terms_services'] ) ) {
+
+        if($_POST['vsc_payment_terms_services'] == 1){
+            $vsc_payment_terms_services = 'Yes';
+        } else {
+            $vsc_payment_terms_services = 'No';
+        }
+        update_post_meta( $order_id, 'vsc_payment_terms_services', sanitize_text_field( $vsc_payment_terms_services ) );
+
+    }
+
+    if ( ! empty( $_POST['vsc_payment_newsletter_subscribe'] ) ) {
+
+        if($_POST['vsc_payment_newsletter_subscribe'] == 1){
+            $vsc_payment_newsletter_subscribe = 'Yes';
+        } else {
+            $vsc_payment_newsletter_subscribe = 'No';
+        }
+        update_post_meta( $order_id, 'vsc_payment_newsletter_subscribe', sanitize_text_field( $vsc_payment_newsletter_subscribe ) );
+
+    }
+    
+
+}
+
+
+
+
+
+/**
+ * Display field value on the order edit page
+ */
+ 
+add_action( 'woocommerce_admin_order_data_after_shipping_address', 'vsc_my_custom_checkout_field_display_admin_order_meta', 10, 1 );
+function vsc_my_custom_checkout_field_display_admin_order_meta($order){
+
+    echo var_dump(get_post_meta($order->get_id()));
+
+    echo '<p><strong>'.__('Additional Phone').':</strong> ' . get_post_meta( $order->get_id(), '_billing_extra_phone', true ) . '</p>';
+
+    echo '<p><strong>'.__('Appartment').':</strong> ' . get_post_meta( $order->get_id(), '_billing_apartment', true ) . '</p>';
+
+    echo '<p><strong>'.__('Floor').':</strong> ' . get_post_meta( $order->get_id(), '_billing_floor', true ) . '</p>';
+
+    echo '<p><strong>'.__('Entry Code').':</strong> ' . get_post_meta( $order->get_id(), '_billing_entry_code', true ) . '</p>';
+
+    echo '<p><strong>'.__('Delivery Date').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_checkout_delivery_date', true ) . '</p>';
+
+    echo '<p><strong>'.__('Delivery Time').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_checkout_delivery_time', true ) . '</p>';
+
+
+    echo '<p><strong>'.__('Want Alternate Products').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_want_alternative_prducts', true ) . '</p>';
+
+    echo '<p><strong>'.__('Shipping Without Plastic Bag').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_shipping_without_plastic_bag', true ) . '</p>';
+
+    echo '<p><strong>'.__('General Comment').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_shipping_general_comment', true ) . '</p>';
+
+    echo '<p><strong>'.__('Note to messanger').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_shipping_note_to_messanger', true ) . '</p>';
+
+    echo '<p><strong>'.__('Terms and Services').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_payment_terms_services', true ) . '</p>';
+
+    echo '<p><strong>'.__('Newsletter Subscribe').':</strong> ' . get_post_meta( $order->get_id(), 'vsc_payment_newsletter_subscribe', true ) . '</p>';
+   
+
+}
+
+
+
+
+
+add_filter('woocommerce_email_order_meta_keys', 'vsc_my_woocommerce_email_order_meta_keys');
+function vsc_my_woocommerce_email_order_meta_keys( $keys ) {
+
+    $keys['Extra Phone'] = '_billing_extra_phone';
+    $keys['Extra Phone'] = '_billing_apartment';
+    $keys['Extra Phone'] = '_billing_floor';
+    $keys['Extra Phone'] = '_billing_entry_code';
+
+    $keys['Extra Phone'] = 'vsc_checkout_delivery_date';
+    $keys['Extra Phone'] = 'vsc_checkout_delivery_time';
+    $keys['Extra Phone'] = 'vsc_want_alternative_prducts';
+    $keys['Extra Phone'] = 'vsc_shipping_without_plastic_bag';
+    $keys['Extra Phone'] = 'vsc_shipping_general_comment';
+    $keys['Extra Phone'] = 'vsc_shipping_note_to_messanger';
+
+    $keys['Extra Phone'] = 'vsc_payment_terms_services';
+    $keys['Extra Phone'] = 'vsc_payment_newsletter_subscribe';
+
+
+    return $keys;
+
+} 
