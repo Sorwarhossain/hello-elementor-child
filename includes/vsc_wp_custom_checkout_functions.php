@@ -312,7 +312,6 @@ function vsc_my_custom_checkout_field_update_order_meta( $order_id ) {
 add_action( 'woocommerce_admin_order_data_after_shipping_address', 'vsc_my_custom_checkout_field_display_admin_order_meta', 10, 1 );
 function vsc_my_custom_checkout_field_display_admin_order_meta($order){
 
-    echo var_dump(get_post_meta($order->get_id()));
 
     echo '<p><strong>'.__('Additional Phone').':</strong> ' . get_post_meta( $order->get_id(), '_billing_extra_phone', true ) . '</p>';
 
@@ -349,21 +348,17 @@ function vsc_my_custom_checkout_field_display_admin_order_meta($order){
 add_filter('woocommerce_email_order_meta_keys', 'vsc_my_woocommerce_email_order_meta_keys');
 function vsc_my_woocommerce_email_order_meta_keys( $keys ) {
 
-    $keys['Extra Phone'] = '_billing_extra_phone';
-    $keys['Extra Phone'] = '_billing_apartment';
-    $keys['Extra Phone'] = '_billing_floor';
-    $keys['Extra Phone'] = '_billing_entry_code';
+    $keys['_billing_extra_phone'] = __('Extra Phone', 'woocommerce');
+    $keys['_billing_apartment'] = __('Appartment', 'woocommerce');
+    $keys['_billing_floor'] = __('Floor', 'woocommerce');
+    $keys['_billing_entry_code'] = __('Entry Code', 'woocommerce');
 
-    $keys['Extra Phone'] = 'vsc_checkout_delivery_date';
-    $keys['Extra Phone'] = 'vsc_checkout_delivery_time';
-    $keys['Extra Phone'] = 'vsc_want_alternative_prducts';
-    $keys['Extra Phone'] = 'vsc_shipping_without_plastic_bag';
-    $keys['Extra Phone'] = 'vsc_shipping_general_comment';
-    $keys['Extra Phone'] = 'vsc_shipping_note_to_messanger';
-
-    $keys['Extra Phone'] = 'vsc_payment_terms_services';
-    $keys['Extra Phone'] = 'vsc_payment_newsletter_subscribe';
-
+    $keys['vsc_checkout_delivery_date'] = __('Delivery Date', 'woocommerce');
+    $keys['vsc_checkout_delivery_time'] = __('Delivery Time', 'woocommerce');
+    $keys['vsc_want_alternative_prducts'] = __('Alternative Products', 'woocommerce');
+    $keys['vsc_shipping_without_plastic_bag'] = __('Shippign Without Plastic Bag', 'woocommerce');
+    $keys['vsc_shipping_general_comment'] = __('General Comment', 'woocommerce');
+    $keys['vsc_shipping_note_to_messanger'] = __('Note To Messanger', 'woocommerce');
 
     return $keys;
 
